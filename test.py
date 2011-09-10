@@ -2,7 +2,11 @@
 #@+node:gcross.20110909201000.1220: * @file test.py
 #@+<< Import needed modules >>
 #@+node:gcross.20110906104131.2942: ** << Import needed modules >>
-import cPickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import itertools
 from numpy import set_printoptions
 import os
@@ -52,7 +56,7 @@ class OperatorTests(unittest.TestCase):
                     .addTerm(GlobalExternalField(Matrix.pauli_Z))
                     .compile()
             )
-            operator_2 = cPickle.loads(cPickle.dumps(operator_1,cPickle.HIGHEST_PROTOCOL))
+            operator_2 = pickle.loads(pickle.dumps(operator_1,pickle.HIGHEST_PROTOCOL))
             for components in itertools.product(*((Vector.qubit_up,Vector.qubit_down),)*number_of_sites):
                 state = (
                     StateBuilder(number_of_sites,2)
@@ -278,7 +282,7 @@ class StateTests(unittest.TestCase):
                     .addTerm(WTerm(Vector.qubit_up,Vector.qubit_down))
                     .compile()
             )
-            state_2 = cPickle.loads(cPickle.dumps(state_1,cPickle.HIGHEST_PROTOCOL))
+            state_2 = pickle.loads(pickle.dumps(state_1,pickle.HIGHEST_PROTOCOL))
             self.assertAlmostEqual(state_1 * state_2,1)
     #@-others
 #@+node:gcross.20110906130654.2922: *3* StateBuilder
