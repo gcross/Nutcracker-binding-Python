@@ -54,9 +54,6 @@ def setError(message):
 setError._c = library.Nutcracker_setError
 setError._c.argtypes = [c_char_p]
 setError._c.restype = None
-
-#@+others
-#@-others
 #@-<< Initialize library bindings >>
 
 #@+others
