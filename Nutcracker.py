@@ -22,6 +22,8 @@
 from collections import namedtuple
 import ctypes
 from ctypes import byref, c_bool, c_char_p, c_float, c_uint32, c_void_p, create_string_buffer, POINTER
+import distutils
+from distutils.version import LooseVersion
 import itertools
 #@-<< Imports >>
 
@@ -35,6 +37,11 @@ c_uint32_p = POINTER(c_uint32)
 import ctypes.util
 
 library = ctypes.cdll.LoadLibrary(ctypes.util.find_library("Nutcracker"))
+
+library.Nutcracker_Version_getString.restype = c_char_p
+version = distutils.version.LooseVersion(library.Nutcracker_Version_getString().decode())
+if version >= LooseVersion("2"):
+    raise ImportError("Nutcracker version is {}, but these binding were designed for version 1".format(version))
 
 clearError = library.Nutcracker_clearError
 clearError.argtypes = []
@@ -544,6 +551,7 @@ class StateBuilder(Handle,ArrayLike,Builder):
 #@+node:gcross.20110906104131.3062: ** << Export list >>
 __all__ = [
     "library",
+    "version",
 
     "clearError",
     "getError",
